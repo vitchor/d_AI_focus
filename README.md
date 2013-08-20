@@ -2,18 +2,22 @@ d_AI_focus
 ==========
 dyfocus using AI
 
-How to get it running (set-up environment tutorial):
+1st Step: Tutorial.
+  - Watch this amazing tutorial: http://www.youtube.com/watch?v=4ONBVNm3isI
+
+2nd Step: Set up development environment.
+- How to get tutorial running:
 
 1. Install iPython: $ sudo easy_install ipython[all]
 2. Install Macport using dmg: http://www.macports.org/install.php
 3. Close/Open terminal.
 4. Install Math pre-requisits (takes a lot of time): $ sudo port install py27-numpy py27-scipy py27-matplotlib py27-ipython +notebook py27-pandas py27-sympy py27-nose
 5. Select installed frameworks: 
-  $ sudo port select --set python python27
-  $ sudo port select --set sphinx py27-sphinx
-  $ sudo port select --set ipython ipython27
-  $ sudo port select --set cython cython27
-  $ sudo port select --set py-sympy py27-sympy
+  - $ sudo port select --set python python27
+  - $ sudo port select --set sphinx py27-sphinx
+  - $ sudo port select --set ipython ipython27
+  - $ sudo port select --set cython cython27
+  - $ sudo port select --set py-sympy py27-sympy
 6. Install scikit: $ sudo port install py27-scikit-learn
 7. Close/Open terminal.
 8. Download IA framework:$ git clone git://github.com/jakevdp/sklearn_pycon2013.git
