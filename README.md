@@ -22,6 +22,7 @@ dyfocus using AI
   9. Download IA framework:$ git clone git://github.com/jakevdp/sklearn_pycon2013.git
   10. Go into the IA's notebooks folder:$ cd sklearn_pycon2013/notebooks
   11. Start and open tutorial server: $ ipython notebook
+  12. (Optional) Install pyamg for better performance: https://pypi.python.org/pypi/pyamg
 
 <b>3rd Step: Run our ward script to get a piece of action<b/>
 - In your terminal, cd to the "development" folder.
