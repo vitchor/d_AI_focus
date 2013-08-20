@@ -17,10 +17,11 @@ dyfocus using AI
     - $ sudo port select --set cython cython27
     - $ sudo port select --set py-sympy py27-sympy
   6. Install scikit: $ sudo port install py27-scikit-learn
-  7. Close/Open terminal.
-  8. Download IA framework:$ git clone git://github.com/jakevdp/sklearn_pycon2013.git
-  9. Go into the IA's notebooks folder:$ cd sklearn_pycon2013/notebooks
-  10. Start and open tutorial server: $ ipython notebook
+  7. Install scikit-image: $ sudo easy_install -U scikit-image
+  8. Close/Open terminal.
+  9. Download IA framework:$ git clone git://github.com/jakevdp/sklearn_pycon2013.git
+  10. Go into the IA's notebooks folder:$ cd sklearn_pycon2013/notebooks
+  11. Start and open tutorial server: $ ipython notebook
 
 <b>3rd Step: Run our ward script to get a piece of action<b/>
 - In your terminal, cd to the "development" folder.
@@ -56,8 +57,11 @@ https://class.coursera.org/ml/lecture/preview
 
 Image to 2D array: http://wiki.scipy.org/Cookbook/Matplotlib/LoadImage
 
-histogram 
+Histogram:
 http://scikit-image.org/docs/dev/auto_examples/plot_hog.html
+
+SciKit-Image Examples:
+http://scikit-image.org/docs/dev/auto_examples/
 
 
 
