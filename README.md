@@ -24,7 +24,7 @@ dyfocus using AI
 
 <b>3rd Step: Run our ward script to get a piece of action<b/>
 - In your terminal, cd to the "development" folder.
-- Run the following: $ python ward.py img/sun_1.jpeg img/sun_2.jpeg 0.1 3
+- Run the following: $ python ward.py input/sun_1.jpeg input/sun_2.jpeg 0.1 3
  
 <b>4th Step: Edit this tutorial and make it better. :)<b/>
 
