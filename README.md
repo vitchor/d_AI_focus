@@ -2,10 +2,10 @@ d_AI_focus
 ==========
 dyfocus using AI
 
-1st Step: Tutorial.
+<b>1st Step: Tutorial.<b/>
   - Watch this amazing tutorial: http://www.youtube.com/watch?v=4ONBVNm3isI
 
-2nd Step: Set up development environment.
+<b>2nd Step: Set up development environment.<b/>
   1. Install iPython: $ sudo easy_install ipython[all]
   2. Install Macport using dmg: http://www.macports.org/install.php
   3. Close/Open terminal.
@@ -22,20 +22,19 @@ dyfocus using AI
   9. Go into the IA's notebooks folder:$ cd sklearn_pycon2013/notebooks
   10. Start and open tutorial server: $ ipython notebook
 
-3rd Step: Run our ward script to get a piece of action
+<b>3rd Step: Run our ward script to get a piece of action<b/>
 - In your terminal, cd to the "development" folder.
 - Run the following: $ python ward.py img/sun_1.jpeg img/sun_2.jpeg 0.1 3
  
-4th Step: Edit this tutorial and make it better. :)
+<b>4th Step: Edit this tutorial and make it better. :)<b/>
 
 ==========
-IMPORTANT!!
+<b>IMPORTANT:<b/>
 fix jpeg bug, install lib:
 http://ethan.tira-thompson.com/Mac_OS_X_Ports.html
 
 ==========
-LEARNING MATERIAL:
-SciKit First steps:
+<b>Learning Material: SciKit First steps<b/>
 
 Matplot's plots example page:
 http://matplotlib.org/gallery.html
@@ -53,7 +52,7 @@ ML Lectures:
 https://class.coursera.org/ml/lecture/preview
 
 ==========
-Image Clustering:
+<b>Learning Material: Image Clustering<b/>
 
 Image to 2D array: http://wiki.scipy.org/Cookbook/Matplotlib/LoadImage
 
