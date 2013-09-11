@@ -42,6 +42,79 @@ def octave_up(wave_array):
         
     return [small_t, high_sound_wave, rate]
     
+def third_up(wave_array):
+
+    high_sound_wave = []
+
+    divisor = 6 # divisor > 3
+
+    sound_wave = wave_array[1]
+    rate = wave_array[2]
+
+    for index in range(len(sound_wave)):        
+        
+        remainder = index % divisor
+        
+        average = None
+        
+        if remainder == 0 and len(sound_wave) > (index + 1):
+            average = np.asscalar(np.int16(sound_wave[index])) + np.asscalar(np.int16(sound_wave[index + 1]))
+            average /= 2
+            average = np.int16(average)
+            
+        elif remainder == 2:
+            average = np.asscalar(np.int16(sound_wave[index])) + np.asscalar(np.int16(sound_wave[index - 1]))
+            average /= 2
+            average = np.int16(average)
+            
+        elif remainder != 1 :
+            average = sound_wave[index]
+        
+        
+        if average is not None:
+            high_sound_wave.append(average)
+            
+    lost_fraction = len(sound_wave) / divisor
+    high_sound_wave += high_sound_wave[0:lost_fraction]
+
+    #normalizes size for non-even primary waves:
+    if len(high_sound_wave) > len(sound_wave):
+        high_sound_wave.pop()
+
+    high_sound_wave = high_sound_wave[:]
+    high_sound_wave = np.asarray(high_sound_wave)
+
+    small_t = np.arange(len(high_sound_wave))*1.0/rate
+
+    return [small_t, high_sound_wave, rate]
+    
+def fifth_up(wave_array):
+
+    high_sound_wave = []
+
+    sound_wave = wave_array[1]
+    rate = wave_array[2]
+    
+    divisor = 3
+    for index in range(len(sound_wave)):
+        if index % divisor !=  1:
+            high_sound_wave.append(sound_wave[index])
+
+    
+    lost_fraction = len(sound_wave) / divisor
+    high_sound_wave += high_sound_wave[0:lost_fraction]
+
+    #normalizes size for non-even primary waves:
+    if len(high_sound_wave) > len(sound_wave):
+        high_sound_wave.pop()
+
+    high_sound_wave = high_sound_wave[:]
+    high_sound_wave = np.asarray(high_sound_wave)
+
+    small_t = np.arange(len(high_sound_wave))*1.0/rate
+
+    return [small_t, high_sound_wave, rate]
+    
 def plot_wave(wave_array):
     
     pl.plot(wave_array[0], wave_array[1])
@@ -101,19 +174,36 @@ def sum_waves(wave_array_1, wave_array_2):
         return 0
             
 # main functions:
-fil = '1Hz.wav'
+fil = '440Hz.wav'
 
 wave_array = wave_to_array(fil)
 play_wave(wave_array)
-first_octave_array = octave_up(wave_array)
-second_octave_array = octave_up(first_octave_array)
-#play_wave(first_octave_array)
-summed_wave = sum_waves(wave_array, first_octave_array)
-summed_wave = sum_waves(summed_wave, second_octave_array)
-plot_wave(summed_wave)
-pl.show()
-#plot_wave(first_octave_array)
-play_wave(summed_wave)
+
+third_array = third_up(wave_array)
+play_wave(third_array)
+
+fifth_array = fifth_up(wave_array)
+play_wave(fifth_array)
+
+first_and_third = sum_waves(wave_array, third_array)
+play_wave(first_and_third)
+
+third_and_fifth = sum_waves(third_array, fifth_array)
+play_wave(third_and_fifth)
+
+first_fifth = sum_waves(wave_array, fifth_array)
+play_wave(first_fifth)
+
+first_third_fifth = sum_waves(wave_array, third_and_fifth)
+play_wave(first_third_fifth)
+
+#summed_wave = sum_waves(wave_array, first_octave_array)
+#summed_wave = sum_waves(summed_wave, second_octave_array)
+#plot_wave(summed_wave)
+#pl.show()
+#plot_wave(first_and_third)
+#play_wave(summed_wave)
+
 #pl.show()
 #print len(summed_wave[0])
 
