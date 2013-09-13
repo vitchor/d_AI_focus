@@ -5,7 +5,6 @@ import pylab as pl
 import wave
 import numpy as np
 import pyaudio
-
 # wave_array format: [t, wave, rate]
 
 def wave_to_array(wav_file):
@@ -18,12 +17,9 @@ def wave_to_array(wav_file):
     
     return [big_t, sound_wave, rate]
 
-def octave_up(wave_array):
+def octave_up(sound_wave, rate):
     
     high_sound_wave = []
-    
-    sound_wave = wave_array[1]
-    rate = wave_array[2]
     
     for index in range(len(sound_wave)):        
         if index % 2 != 1:
@@ -40,7 +36,7 @@ def octave_up(wave_array):
         
     small_t = np.arange(len(high_sound_wave))*1.0/rate
         
-    return [small_t, high_sound_wave, rate]
+    return [small_t, high_sound_wave]
     
 def third_up(wave_array):
 
@@ -88,12 +84,9 @@ def third_up(wave_array):
 
     return [small_t, high_sound_wave, rate]
     
-def fifth_up(wave_array):
+def fifth_up(sound_wave, rate):
 
     high_sound_wave = []
-
-    sound_wave = wave_array[1]
-    rate = wave_array[2]
     
     divisor = 3
     for index in range(len(sound_wave)):
@@ -113,7 +106,7 @@ def fifth_up(wave_array):
 
     small_t = np.arange(len(high_sound_wave))*1.0/rate
 
-    return [small_t, high_sound_wave, rate]
+    return [high_sound_wave, small_t]
     
 def plot_wave(wave_array):
     
@@ -173,41 +166,86 @@ def sum_waves(wave_array_1, wave_array_2):
     else:
         return 0
             
+def map_windows(wave_array):
+    even_detector = 0
+    window_map = []
+    for iteration in range(len(wave_array[1])):
+        last_value = np.asscalar(np.int16(wave_array[1][iteration-1]))
+        current_value = np.asscalar(np.int16(wave_array[1][iteration]))
+        value_multiplication = last_value * current_value
+       
+        if (current_value == 0 and last_value != 0) or value_multiplication < 0: 
+            window_map.append(iteration)
+    return window_map
+    
+    
+def draw_window_map(window_map, wave_array):
+    window_map_yaxis = []
+    times_array = []
+    for iteration in range(len(window_map)):
+        window_map_yaxis.append(0)
+        times_array.append(wave_array[0][window_map[iteration]])
+    pl.plot(times_array,window_map_yaxis,'ro')
+
+def iterative_fifth_up(wave_array, window_map):
+    ## STILL TO BE DONE :)
+    rate = wave_array[2]
+    
+    final_wave = np.copy(wave_array)
+    
+    final_wave[1] = final_wave[1].tolist()
+    
+    for iteration in range(len(window_map)/2):
+
+        initial_index = window_map[iteration * 2]
+        final_index = window_map[(iteration + 1) * 2]
+        
+        segment_fifth = fifth_up(wave_array[1][initial_index:final_index], rate)
+       
+
+        if iteration == 0:
+            final_wave[1] = segment_fifth[0].tolist()
+        else:
+            final_wave[1] += segment_fifth[0].tolist()
+    
+    final_wave[1] = np.asarray(final_wave[1])
+    
+    return final_wave
+    
+def iterative_octave_up(wave_array, window_map):
+
+    rate = wave_array[2]
+
+    final_wave = np.copy(wave_array)
+
+    final_wave[1] = final_wave[1].tolist()
+
+    for iteration in range(len(window_map)/2-1):
+
+        initial_index = window_map[iteration * 2]
+        final_index = window_map[(iteration + 1) * 2]
+
+        segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)
+
+        if iteration == 0:
+            final_wave[1] = segment_octave[0].tolist()
+        else:
+            final_wave[1] += segment_octave[0].tolist()
+
+    final_wave[1] = np.asarray(final_wave[1])
+
+    return final_wave
+
 # main functions:
-fil = '440Hz.wav'
-
+fil = 'memo.wav'
 wave_array = wave_to_array(fil)
+window_map_reply = map_windows(wave_array)
+#plot_wave(wave_array)
+#draw_window_map(window_map_reply, wave_array)
+#pl.show()
+#play_wave(wave_array)
+#plot_wave(wave_array)
+wave_array = iterative_octave_up(wave_array, window_map_reply)
+wave_array[0] = wave_array[0][0:len(wave_array[1])]
 play_wave(wave_array)
-
-third_array = third_up(wave_array)
-play_wave(third_array)
-
-fifth_array = fifth_up(wave_array)
-play_wave(fifth_array)
-
-first_and_third = sum_waves(wave_array, third_array)
-play_wave(first_and_third)
-
-third_and_fifth = sum_waves(third_array, fifth_array)
-play_wave(third_and_fifth)
-
-first_fifth = sum_waves(wave_array, fifth_array)
-play_wave(first_fifth)
-
-first_third_fifth = sum_waves(wave_array, third_and_fifth)
-play_wave(first_third_fifth)
-
-#summed_wave = sum_waves(wave_array, first_octave_array)
-#summed_wave = sum_waves(summed_wave, second_octave_array)
-#plot_wave(summed_wave)
 #pl.show()
-#plot_wave(first_and_third)
-#play_wave(summed_wave)
-
-#pl.show()
-#print len(summed_wave[0])
-
-
-
-#play_wave(first_octave_array)
-#play_wave(second_octave_array)
