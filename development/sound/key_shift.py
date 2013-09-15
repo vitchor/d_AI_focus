@@ -152,6 +152,10 @@ def play_wave(wave_array):
     p.terminate()
     
 def sum_waves(wave_array_1, wave_array_2):
+    
+    print len(wave_array_1[1]), len(wave_array_2[1])
+    
+    wave_array_2[1] = wave_array_2[1][0:len(wave_array_1[1])]
     if len(wave_array_1[1]) == len(wave_array_2[1]):
         result_wave = []
         for index in range(len(wave_array_1[1])):
@@ -168,7 +172,7 @@ def sum_waves(wave_array_1, wave_array_2):
             
 def map_windows(wave_array):
     even_detector = 0
-    window_map = []
+    window_map = [0]
     for iteration in range(len(wave_array[1])):
         last_value = np.asscalar(np.int16(wave_array[1][iteration-1]))
         current_value = np.asscalar(np.int16(wave_array[1][iteration]))
@@ -220,32 +224,63 @@ def iterative_octave_up(wave_array, window_map):
 
     final_wave[1] = final_wave[1].tolist()
 
-    for iteration in range(len(window_map)/2-1):
+    for iteration in range(len(window_map)/2):
 
         initial_index = window_map[iteration * 2]
         final_index = window_map[(iteration + 1) * 2]
-
+        # if iteration == 0:
+        #     segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)
+        # else:
+        #     
+        # segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)
+        
+        #print segment_octave[0]
         segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)
-
+        
+        if (iteration + 1) * 2 == len(window_map) - 2:
+            break
+        
         if iteration == 0:
-            final_wave[1] = segment_octave[0].tolist()
+            final_wave[1] = segment_octave[1].tolist()
+            plot_wave(segment_octave)
         else:
-            final_wave[1] += segment_octave[0].tolist()
+            final_wave[1] += segment_octave[1].tolist()
 
-    final_wave[1] = np.asarray(final_wave[1])
+    final_wave[1] = np.asarray(final_wave[1], dtype='int16')
 
+    final_wave[0] = final_wave[0][0:len(final_wave[1])]
+    # plot_wave(final_wave)
     return final_wave
 
+np.set_printoptions(threshold='nan')
 # main functions:
-fil = 'memo.wav'
+fil = 'Memo.wav'
 wave_array = wave_to_array(fil)
+#third = third_up(wave_array)
 window_map_reply = map_windows(wave_array)
-#plot_wave(wave_array)
-#draw_window_map(window_map_reply, wave_array)
+plot_wave(wave_array)
+draw_window_map(window_map_reply, wave_array)
 #pl.show()
-#play_wave(wave_array)
-#plot_wave(wave_array)
-wave_array = iterative_octave_up(wave_array, window_map_reply)
-wave_array[0] = wave_array[0][0:len(wave_array[1])]
+#play_wave(third)
+octave_up = iterative_fifth_up(wave_array, window_map_reply)
+
+for iteration in range(len(octave_up[1])):
+    octave_up[1][iteration] = np.int16(octave_up[1][iteration])
+    
+print type(wave_array[1])
+print type(octave_up[1])
+
+plot_wave(octave_up)
+
 play_wave(wave_array)
-#pl.show()
+play_wave(octave_up)
+# wave_array[1] = octave_up[1]
+# wave_array[0] = octave_up[0]
+# wave_array[2] = octave_up[2]
+# play_wave(wave_array)
+
+summed = sum_waves(octave_up, wave_array)
+play_wave(summed)
+#wave_array[0] = wave_array[0][0:len(wave_array[1])]
+
+pl.show()
