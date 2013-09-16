@@ -5,6 +5,7 @@ import pylab as pl
 import wave
 import numpy as np
 import pyaudio
+from ctypes import *
 # wave_array format: [t, wave, rate]
 
 def wave_to_array(wav_file):
@@ -232,7 +233,7 @@ def iterative_octave_up(wave_array, window_map):
         #     segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)
         # else:
         #     
-        # segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)
+        # segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)3
         
         #print segment_octave[0]
         segment_octave = octave_up(wave_array[1][initial_index:final_index], rate)
@@ -242,7 +243,7 @@ def iterative_octave_up(wave_array, window_map):
         
         if iteration == 0:
             final_wave[1] = segment_octave[1].tolist()
-            plot_wave(segment_octave)
+            #plot_wave(segment_octave)
         else:
             final_wave[1] += segment_octave[1].tolist()
 
@@ -252,35 +253,23 @@ def iterative_octave_up(wave_array, window_map):
     # plot_wave(final_wave)
     return final_wave
 
-np.set_printoptions(threshold='nan')
-# main functions:
-fil = 'Memo.wav'
-wave_array = wave_to_array(fil)
-#third = third_up(wave_array)
-window_map_reply = map_windows(wave_array)
-plot_wave(wave_array)
-draw_window_map(window_map_reply, wave_array)
-#pl.show()
-#play_wave(third)
-octave_up = iterative_fifth_up(wave_array, window_map_reply)
 
-for iteration in range(len(octave_up[1])):
-    octave_up[1][iteration] = np.int16(octave_up[1][iteration])
-    
-print type(wave_array[1])
-print type(octave_up[1])
+# configuration functions:
+my_c_library = CDLL('cpp/smbPitchShift.so')
+print my_c_library.smbPitchShift(None)
+# np.set_printoptions(threshold='nan')
+# fil = './samples/memo.wav'
+# wave_array = wave_to_array(fil)
+# window_map_reply = map_windows(wave_array)
+# octave_array = iterative_octave_up(wave_array, window_map_reply)
+# double_octave_array = iterative_octave_up(octave_array, window_map_reply)
 
-plot_wave(octave_up)
-
-play_wave(wave_array)
-play_wave(octave_up)
-# wave_array[1] = octave_up[1]
-# wave_array[0] = octave_up[0]
-# wave_array[2] = octave_up[2]
+# playing routines:
 # play_wave(wave_array)
+# play_wave(double_octave_array)
 
-summed = sum_waves(octave_up, wave_array)
-play_wave(summed)
-#wave_array[0] = wave_array[0][0:len(wave_array[1])]
-
-pl.show()
+# plotting routines:
+# draw_window_map(window_map_reply, wave_array)
+# plot_wave(wave_array)
+# plot_wave(octave_array)
+# pl.show()
